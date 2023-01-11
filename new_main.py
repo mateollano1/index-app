@@ -13,12 +13,12 @@ class PronosticoView():
             "Otros Ingresos   ": "-IPC",
         }
         selection_conf = {
-            "Año_Inicial": "",
-            "Año_Final": "",
-            "Despacho_central": False,
-            "Impuesto_de_renta":"",
-            "Días_por_cobrar":"",
-            "Días_por_pagar":"",
+            "Año_Inicial        ": "",
+            "Año_Final          ": "",
+            "Despacho_central   ": False,
+            "Impuesto_de_renta  ":"",
+            "Días_por_cobrar    ":"",
+            "Días_por_pagar     ":"",
         }
 
         cols = ["Costos Variables", "Costo Marginal   ", "Precio CXC       ",
@@ -34,7 +34,7 @@ class PronosticoView():
                 sg.Text('\n\n  Costos Variables                IPC\n\n  Costo Marginal                   IPC\n\n  Precio CXC                       IPC\n\n  Otros Ingresos                   IPC', key="selected_index", pad=((80, 20), (0, 0)),
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
                 sg.VSeperator(),
-                sg.Text("Año Inicial: ", key="selected_conf", pad=((10, 10), (0, 0)),
+                sg.Text("\n\n  Año Inicial                  \n\n  Año Final                    \n\n  Despacho central             False\n\n  Impuesto de renta            \n\n  Días por cobrar              \n\n  Días por pagar               ", key="selected_conf", pad=((10, 10), (0, 0)),
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR)],
         ]
         indexadores_viewer = [
@@ -104,11 +104,11 @@ class PronosticoView():
                 sg.Text('Año Inicial', size=(15, 1), pad=((10, 0), (10, 5)),
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
                 sg.InputText(size=(15, 1), pad=(
-                    (10, 0), (10, 5)), key="-conf&Año_Inicial", enable_events=True,),
+                    (10, 0), (10, 5)), key="-conf&Año_Inicial        ", enable_events=True,),
                 sg.Text('Año Final', size=(15, 1), pad=((60, 0), (10, 5)),
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
                 sg.InputText(size=(15, 1), pad=(
-                    (10, 100), (10, 5)), key="-conf&Año_Final", enable_events=True,),
+                    (10, 100), (10, 5)), key="-conf&Año_Final          ", enable_events=True,),
             ],
             [
                 sg.Text('Despacho Central', pad=((10, 0), (10, 5)),
@@ -116,25 +116,25 @@ class PronosticoView():
                 sg.Checkbox(
                     '',
                     enable_events=True,
-                    background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR, key="-conf&Despacho_central")
+                    background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR, key="-conf&Despacho_central   ")
             ],
             [
                 sg.Text('Impuesto de renta', size=(15, 1), pad=(
                     (10, 0), (10, 5)), background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
                 sg.InputText(size=(15, 1), pad=(
-                    (10, 0), (10, 5)), key="-conf&Impuesto_de_renta", enable_events=True)
+                    (10, 0), (10, 5)), key="-conf&Impuesto_de_renta  ", enable_events=True)
             ],
             [
                 sg.Text('Días por cobrar', size=(15, 1), pad=((10, 0), (10, 5)),
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
                 sg.InputText(
-                    size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&Días_por_cobrar", enable_events=True)
+                    size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&Días_por_cobrar    ", enable_events=True)
             ],
             [
                 sg.Text('Días por pagar', size=(15, 1), pad=((10, 0), (10, 5)),
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
                 sg.InputText(
-                    size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&Días_por_pagar", enable_events=True)
+                    size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&Días_por_pagar     ", enable_events=True)
             ],
             [sg.Column(summary_viewer, size=(550, 330), pad=((0, 0), (50, 0)),
                        background_color=BACKGROUND_COLOR), ],
@@ -194,7 +194,7 @@ class PronosticoView():
                 # conf_summary = f"""\n\n  Año Inicial:  {selection_conf['Año_Inicial']}        Año Final:  {selection_conf['Año_Final']} \n\n
                 # Despacho central:  {selection_conf['Despacho_central']}"""
                 for selected in selection_conf:
-                    conf_summary = f"{conf_summary}\n\n  {selected.replace('_',' ')}:                {selection_conf[selected]}"
+                    conf_summary = f"{conf_summary}\n\n  {selected.replace('_',' ')}          {selection_conf[selected]}"
                 window["selected_conf"].update(conf_summary)
             # if "-restore-" in event:
             #     selection = {}
