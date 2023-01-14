@@ -59,12 +59,12 @@ class PronosticoView():
 
         file_list_column = [
             [
-                sg.Image(source="imgs/img2-120.png", pad=((100, 190), (30, 15)),
+                sg.Image(source="imgs/img2-120.png", pad=((100, 190), (15, 15)),
                          size=(120, 120), background_color=BACKGROUND_COLOR),
-                sg.Image(source="imgs/img2-120.png", pad=((0, 0), (30, 15)),  size=(
+                sg.Image(source="imgs/img2-120.png", pad=((0, 0), (15, 15)),  size=(
                     120, 120), background_color=BACKGROUND_COLOR),
             ],
-            [sg.Text("Evaluación Económica", pad=((150, 0), (15, 0)),
+            [sg.Text("Evaluación Económica", pad=((150, 0), (5, 0)),
                      background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR, font=("Nakula", 26))],
             [sg.Text("Proyectos Hidroeléctricos", pad=((220, 0), (0, 15)),
                      background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR, font=("Nakula", 14))],
@@ -77,9 +77,9 @@ class PronosticoView():
 
             ],
             [
-                sg.Text("Indexadores", pad=((0, 0), (50, 0)),
+                sg.Text("Indexadores", pad=((0, 0), (20, 0)),
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR, font=("Nakula", 14)),
-                sg.Button(image_source="imgs/reload.png", image_size=(15, 15), pad=((5, 0), (45, 0)),
+                sg.Button(image_source="imgs/reload.png", image_size=(15, 15), pad=((5, 0), (15, 0)),
                           button_color=BACKGROUND_COLOR, border_width=0,
                           tooltip="Reiniciar valores", enable_events=True, key="-restore-")
             ],
@@ -95,7 +95,7 @@ class PronosticoView():
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
             ],
             [
-                sg.Column(indexadores_viewer, pad=((30, 0), (0, 30)),
+                sg.Column(indexadores_viewer, pad=((30, 0), (0, 15)),
                           vertical_scroll_only=True, background_color=BACKGROUND_COLOR),
             ],
         ]
@@ -150,11 +150,11 @@ class PronosticoView():
                        background_color=BACKGROUND_COLOR), ],
             [sg.Button('Calcular',  visible=True, font=(
                 'Helvetica', 11), key='-calculate', border_width=0, enable_events=True,
-                button_color="#454851", pad=((200, 0), (80, 50))
+                button_color="#454851", pad=((200, 0), (50, 30))
             ),
                 sg.Button('Reiniciar Valores',  visible=True, enable_events=True, font=(
                     'Helvetica', 11), key='-default-values', border_width=0,
-                button_color="#454851", pad=((20, 0), (80, 50))
+                button_color="#454851", pad=((20, 0), (50, 30))
             )],
             [sg.Image(source="imgs/loading.gif", key='-GIF-', pad=((180, 0), (0, 5)), size=(25, 25), background_color=BACKGROUND_COLOR, visible=False,),
                 sg.Text('Ejecutando procesos, por favor espera ...', size=(50, 1), pad=((10, 0), (0, 5)), key="-message", visible=False,
@@ -171,7 +171,7 @@ class PronosticoView():
             ]
         ]
 
-        window = sg.Window("Name of app", layout, resizable=True, element_justification="center", auto_size_text=True,
+        window = sg.Window("Name of app", layout,
                            background_color=BACKGROUND_COLOR)
         while True:
             event, values = window.read(timeout=15)
