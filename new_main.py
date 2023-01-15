@@ -39,7 +39,7 @@ class PronosticoView():
                      background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR)]]
         summary_viewer = [
             [sg.Text("Resumen", background_color=BACKGROUND_COLOR,
-                     text_color=PRIMARY_TEXT_COLOR, font=("Nakula", 16), pad=((270, 0), (30, 0)))],
+                     text_color=PRIMARY_TEXT_COLOR, font=("Nakula", 16), pad=((270, 0), (50, 0)))],
             [sg.Text("Directorio Seleccionado:", key="folder_name", background_color=BACKGROUND_COLOR, pad=((30, 0), (10, 0)),
                      text_color=PRIMARY_TEXT_COLOR)],
             [sg.Text("Indexadores", pad=((150, 100), (20, 0))),
@@ -233,13 +233,14 @@ class PronosticoView():
                     window[f"-IPC&{i}"].update(True)
                     window["selected_index"].update(DEFAULT_SELECTED_INDEX)
 
-            if "-calculate" in event:
+            if event == "-calculate":
                 print("To calculate")
                 window["-calculate"].update(disabled=True)
                 window["-default-values"].update(disabled=True)
+                window["-wac-calculate"].update(disabled=True)
                 window["-GIF-"].update(visible=True)
                 window["-message"].update(visible=True)
-            if "-default-values" in event:
+            if event == "-default-values":
                 selection = DEFAULT_INDEX_SELECTION.copy()
                 selection_conf = DEFAULT_SELECTION_CONF.copy()
                 for selected in selection_conf:
