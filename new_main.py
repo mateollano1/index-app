@@ -144,10 +144,11 @@ class PronosticoView():
                     (10, 0), (10, 5)), background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
                 sg.InputText(size=(15, 1), pad=(
                     (10, 0), (10, 5)), key="-conf&Impuesto_de_renta   ", enable_events=True),
-                sg.Text('Años a diferir', size=(15, 1), pad=(
-                        (60, 0), (10, 5)), background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
-                sg.InputText(size=(15, 1), pad=(
-                    (10, 0), (10, 5)), key="-conf&Años_a_diferir          ", enable_events=True)
+                sg.Text('Costo patrimonio', size=(15, 1), pad=((60, 0), (10, 5)),
+                        background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
+                sg.InputText(
+                    size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&costo_patrimonio     ", enable_events=True)
+
             ],
             [
                 sg.Text('Días por cobrar', size=(17, 1), pad=((10, 0), (10, 5)),
@@ -158,13 +159,6 @@ class PronosticoView():
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
                 sg.InputText(
                     size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&Días_por_pagar        ", enable_events=True)
-            ],
-            [
-                
-                sg.Text('Costo patrimonio', size=(17, 1), pad=((10, 0), (10, 5)),
-                        background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
-                sg.InputText(
-                    size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&costo_patrimonio     ", enable_events=True)
             ],
             [
                 sg.Text("Ampliar", pad=((0, 0), (0, 0)),
@@ -194,10 +188,11 @@ class PronosticoView():
             ],
             [sg.HSeparator()],
             [
-                sg.Text('Años a diferir', size=(17, 1), pad=((10, 0), (10, 0)),
-                        background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
-                sg.InputText(
-                    size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&Aumento_ampliación", enable_events=True)],
+                sg.Text('Años a diferir', size=(17, 1), pad=(
+                        (10, 0), (10, 5)), background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
+                sg.InputText(size=(15, 1), pad=(
+                    (10, 0), (10, 5)), key="-conf&Años_a_diferir          ", enable_events=True)
+            ],
             [sg.Column(summary_viewer,  pad=((0, 0), (10, 0)),
                        background_color=BACKGROUND_COLOR), ],
             [sg.Button('Calcular',  visible=True, font=(
