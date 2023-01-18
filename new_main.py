@@ -6,7 +6,7 @@ class PronosticoView():
         BACKGROUND_COLOR = "#f3f3f2"
         PRIMARY_TEXT_COLOR = "#59595b"
         DEFAULT_SELECTED_INDEX = "\n\n  Costo Marginal                   IPC\n\n  Precio CXC                       IPC\n\n  Otros Ingresos                   IPC\n\n  CERE                               IPC\n\n  FAZNI                               IPC\n\n  Ley 99                               IPC\n\n  AGC                                 IPC"
-        DEFAULT_SELECTED_CONF = "\n\n  Año Inicial                     \n\n  Año Final                       \n\n  Despacho central            False\n\n  Año Evaluación              \n\n  Impuesto de renta           \n\n  Días por cobrar               \n\n  Días por pagar                \n\n  Años a diferir                \n\n  Aumento ampliación               \n\n  costo patrimonio               "
+        DEFAULT_SELECTED_CONF = "\n\n  Año Inicial                     \n\n  Año Final                       \n\n  Despacho central           False\n\n  Año Evaluación              \n\n  Impuesto de renta           \n\n  costo patrimonio             \n\n  Días por cobrar               \n\n  Días por pagar                \n\n  Aumento ampliación        \n\n  Costo ampliación          \n\n  Año ampliación            \n\n  Años a diferir                   "
         DEFAULT_INDEX_SELECTION = {
             "Costo Marginal   ": "-IPC",
             "Precio CXC       ": "-IPC",
@@ -22,11 +22,13 @@ class PronosticoView():
             "Despacho_central   ": False,
             "Año_Evaluación      ": "",
             "Impuesto_de_renta   ": "",
+            "costo_patrimonio     ": "",
             "Días_por_cobrar       ": "",
             "Días_por_pagar        ": "",
-            "Años_a_diferir          ": "",
             "Aumento_ampliación": "",
-            "costo_patrimonio     ": ""
+            "Costo_ampliación     ": "",
+            "Año_ampliación        ": "",
+            "Años_a_diferir           ": "",
         }
         super().__init__()
         selection = DEFAULT_INDEX_SELECTION.copy()
@@ -174,13 +176,13 @@ class PronosticoView():
                 sg.Text('Costo ampliación', size=(15, 1), pad=((60, 0), (10, 5)),
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
                 sg.InputText(
-                    size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&Costo_ampliación", enable_events=True),
+                    size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&Costo_ampliación     ", enable_events=True),
             ],
             [
                 sg.Text('Año ampliación', size=(17, 1), pad=((10, 0), (10, 5)),
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
                 sg.InputText(
-                    size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&Año_ampliación", enable_events=True),
+                    size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&Año_ampliación        ", enable_events=True),
             ],
             [
                 sg.Text("Diferir", pad=((0, 0), (0, 0)),
@@ -191,7 +193,7 @@ class PronosticoView():
                 sg.Text('Años a diferir', size=(17, 1), pad=(
                         (10, 0), (10, 5)), background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
                 sg.InputText(size=(15, 1), pad=(
-                    (10, 0), (10, 5)), key="-conf&Años_a_diferir          ", enable_events=True)
+                    (10, 0), (10, 5)), key="-conf&Años_a_diferir           ", enable_events=True)
             ],
             [sg.Column(summary_viewer,  pad=((0, 0), (10, 0)),
                        background_color=BACKGROUND_COLOR), ],
