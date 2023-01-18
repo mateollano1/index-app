@@ -39,7 +39,7 @@ class PronosticoView():
                      background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR)]]
         summary_viewer = [
             [sg.Text("Resumen", background_color=BACKGROUND_COLOR,
-                     text_color=PRIMARY_TEXT_COLOR, font=("Nakula", 16), pad=((270, 0), (50, 0)))],
+                     text_color=PRIMARY_TEXT_COLOR, font=("Nakula", 14), pad=((270, 0), (0, 0)))],
             [sg.Text("Directorio Seleccionado:", key="folder_name", background_color=BACKGROUND_COLOR, pad=((30, 0), (10, 0)),
                      text_color=PRIMARY_TEXT_COLOR)],
             [sg.Text("Indexadores", pad=((150, 100), (20, 0))),
@@ -160,16 +160,45 @@ class PronosticoView():
                     size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&Días_por_pagar        ", enable_events=True)
             ],
             [
-                sg.Text('Aumento ampliación', size=(17, 1), pad=((10, 0), (10, 5)),
-                        background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
-                sg.InputText(
-                    size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&Aumento_ampliación", enable_events=True),
-                sg.Text('Costo patrimonio', size=(15, 1), pad=((60, 0), (10, 5)),
+                
+                sg.Text('Costo patrimonio', size=(17, 1), pad=((10, 0), (10, 5)),
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
                 sg.InputText(
                     size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&costo_patrimonio     ", enable_events=True)
             ],
-            [sg.Column(summary_viewer,  pad=((0, 0), (30, 0)),
+            [
+                sg.Text("Ampliar", pad=((0, 0), (0, 0)),
+                        background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR, font=("Nakula", 11)),
+            ],
+            [sg.HSeparator()],
+            [
+
+                sg.Text('Aumento ampliación', size=(17, 1), pad=((10, 0), (10, 5)),
+                        background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
+                sg.InputText(
+                    size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&Aumento_ampliación", enable_events=True),
+                sg.Text('Costo ampliación', size=(15, 1), pad=((60, 0), (10, 5)),
+                        background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
+                sg.InputText(
+                    size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&Costo_ampliación", enable_events=True),
+            ],
+            [
+                sg.Text('Año ampliación', size=(17, 1), pad=((10, 0), (10, 5)),
+                        background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
+                sg.InputText(
+                    size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&Año_ampliación", enable_events=True),
+            ],
+            [
+                sg.Text("Diferir", pad=((0, 0), (0, 0)),
+                        background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR, font=("Nakula", 11)),
+            ],
+            [sg.HSeparator()],
+            [
+                sg.Text('Años a diferir', size=(17, 1), pad=((10, 0), (10, 0)),
+                        background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
+                sg.InputText(
+                    size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&Aumento_ampliación", enable_events=True)],
+            [sg.Column(summary_viewer,  pad=((0, 0), (10, 0)),
                        background_color=BACKGROUND_COLOR), ],
             [sg.Button('Calcular',  visible=True, font=(
                 'Helvetica', 11), key='-calculate', border_width=0, enable_events=True,
