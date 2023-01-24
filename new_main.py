@@ -7,6 +7,27 @@ class PronosticoView():
         PRIMARY_TEXT_COLOR = "#59595b"
         DEFAULT_SELECTED_INDEX = "\n\n  Costo Marginal                   IPC\n\n  Precio CXC                       IPC\n\n  Otros Ingresos                   IPC\n\n  CERE                               IPC\n\n  FAZNI                               IPC\n\n  Ley 99                               IPC\n\n  AGC                                 IPC"
         DEFAULT_SELECTED_CONF = "\n\n  Año Inicial                     \n\n  Año Final                       \n\n  Despacho central           False\n\n  Año Evaluación              \n\n  Impuesto de renta           \n\n  costo patrimonio             \n\n  Días por cobrar               \n\n  Días por pagar                \n\n  Aumento ampliación        \n\n  Costo ampliación          \n\n  Año ampliación            \n\n  Años a diferir                   "
+        METHOD_VALUES = {
+            "Año_Inicial             ": "init_year",
+            "Año_Final               ": "end_year",
+            "Despacho_central   ": "central_dispatched",
+            "Impuesto_de_renta   ": "impo_renta",
+            "Días_por_cobrar       ": "dias_cobrar",
+            "Aumento_ampliación": "flow_increase",
+            "Costo_ampliación     ": "increase_cost",
+            "Año_ampliación        ": "year_increase",
+            "costo_patrimonio     ": "costo_patrimonio",
+            "Años_a_diferir           ": "differ_option_period"
+        }
+        INDEX_VALUES = {
+            "Costo Marginal   ": "marginal cost",
+            "Precio CXC       ": "contract prices",
+            "Otros Ingresos   ": "other incomes",
+            "CERE               ": "confiability prices",
+            "FAZNI               ": "fazni",
+            "Ley 99               ": "Ley 99",
+            "AGC                 ": "Agc",
+        }
         DEFAULT_INDEX_SELECTION = {
             "Costo Marginal   ": "-IPC",
             "Precio CXC       ": "-IPC",
@@ -33,6 +54,7 @@ class PronosticoView():
         super().__init__()
         selection = DEFAULT_INDEX_SELECTION.copy()
         selection_conf = DEFAULT_SELECTION_CONF.copy()
+        folder = ""
         deva = [
             [sg.Text(DEFAULT_SELECTED_INDEX, key="selected_index", pad=((80, 20), (0, 75)),
                      background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
@@ -249,8 +271,13 @@ class PronosticoView():
             if "-conf&" in event:
                 value, key = event.split("&")
                 input_value = values[event]
-                selection_conf[key] = input_value
                 conf_summary = ""
+                if "Despacho_central" not in event and values[event] != "":
+                    last_digit = values[event][-1]
+                    if not last_digit.isnumeric() and last_digit != ".":
+                        window[event].update(values[event][0:-1])
+                        continue
+                selection_conf[key] = input_value
                 for selected in selection_conf:
                     conf_summary = f"{conf_summary}\n\n  {selected.replace('_',' ')}        {selection_conf[selected]}"
                 window["selected_conf"].update(conf_summary)
@@ -259,13 +286,62 @@ class PronosticoView():
                     window[f"-IPC&{i}"].update(True)
                     window["selected_index"].update(DEFAULT_SELECTED_INDEX)
 
-            if event == "-calculate":
-                print("To calculate")
+            if "-calculate" in event:
                 window["-calculate"].update(disabled=True)
                 window["-default-values"].update(disabled=True)
                 window["-wac-calculate"].update(disabled=True)
                 window["-GIF-"].update(visible=True)
-                window["-message"].update(visible=True)
+                window["-message"].update("Ejecutando procesos, por favor espera ...",
+                                          visible=True, text_color=PRIMARY_TEXT_COLOR)
+                final_values = {}
+                final_index = {}
+                output_message = ""
+                try:
+                    if folder == "":
+                        raise
+                    for form_attributes, attributes in METHOD_VALUES.items():
+                        if values[f"-conf&{form_attributes}"] == "":
+                            raise
+                        final_values[attributes] = float(
+                            values[f"-conf&{form_attributes}"])
+                    for form_attributes, attributes in INDEX_VALUES.items():
+                        final_index[attributes] = selection[form_attributes]
+                    
+                    final_values["index_dictionary"] = final_index
+                    final_values["working_directory"] = folder
+                    print(final_values)
+                    if event == "-calculate":
+                        #eecute calculate
+                        print("executing")
+                        # status, response = calculate(**final_values)
+                        # if status < 500:
+                        #     output_message = response
+                        #     output_color = "#6aa84f"
+                        # else:
+                        #     output_message = response
+                        #     output_color = "#A54C4C"
+
+                    if event == "-wac-calculate":
+                        print("executing wac")
+                        # status, response = calculate_wac(**final_values)
+                        # if status < 500:
+                        #     output_message = response
+                        #     output_color = "#6aa84f"
+                        # else:
+                        #     output_message = response
+                        #     output_color = "#A54C4C"
+
+                except:
+                    output_message = "Debe diligenciar todos los campos del formulario"
+                    output_color = "#A54C4C"
+                finally:
+                    window["-message"].update(output_message,
+                                              text_color=output_color)
+                    window["-GIF-"].update(visible=False)
+                    window["-calculate"].update(disabled=False)
+                    window["-default-values"].update(disabled=False)
+                    window["-wac-calculate"].update(disabled=False)
+
             if event == "-default-values":
                 selection = DEFAULT_INDEX_SELECTION.copy()
                 selection_conf = DEFAULT_SELECTION_CONF.copy()
