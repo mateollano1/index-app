@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
-
-
+from pch_evaluator import *
+import traceback
 class PronosticoView():
     def __init__(self) -> None:
         BACKGROUND_COLOR = "#f3f3f2"
@@ -13,6 +13,7 @@ class PronosticoView():
             "Despacho_central   ": "central_dispatched",
             "Impuesto_de_renta   ": "impo_renta",
             "Días_por_cobrar       ": "dias_cobrar",
+            "Días_por_pagar        ": "dias_pagar",
             "Aumento_ampliación": "flow_increase",
             "Costo_ampliación     ": "increase_cost",
             "Año_ampliación        ": "year_increase",
@@ -21,12 +22,13 @@ class PronosticoView():
         }
         INDEX_VALUES = {
             "Costo Marginal   ": "marginal cost",
-            "Precio CXC       ": "contract prices",
+            "Precio CXC       ": "confiability prices",
             "Otros Ingresos   ": "other incomes",
-            "CERE               ": "confiability prices",
+            "CERE               ": "CERE",
             "FAZNI               ": "fazni",
             "Ley 99               ": "Ley 99",
             "AGC                 ": "Agc",
+            "Precios contratos   ": "contract prices"
         }
         DEFAULT_INDEX_SELECTION = {
             "Costo Marginal   ": "-IPC",
@@ -36,6 +38,8 @@ class PronosticoView():
             "FAZNI               ": "-IPC",
             "Ley 99               ": "-IPC",
             "AGC                 ": "-IPC",
+            "Precios contratos   ": "-IPC",
+
         }
         DEFAULT_SELECTION_CONF = {
             "Año_Inicial             ": "",
@@ -305,33 +309,88 @@ class PronosticoView():
                         final_values[attributes] = float(
                             values[f"-conf&{form_attributes}"])
                     for form_attributes, attributes in INDEX_VALUES.items():
-                        final_index[attributes] = selection[form_attributes]
+                        final_index[attributes] = selection[form_attributes].split('-')[1]
                     
                     final_values["index_dictionary"] = final_index
                     final_values["working_directory"] = folder
-                    print(final_values)
                     if event == "-calculate":
-                        #eecute calculate
-                        print("executing")
-                        # status, response = calculate(**final_values)
-                        # if status < 500:
-                        #     output_message = response
-                        #     output_color = "#6aa84f"
-                        # else:
-                        #     output_message = response
-                        #     output_color = "#A54C4C"
+                        print("executing calculate")
+                        #execute calculate
+                        try:
+                            object = pch_conomic_evaluation(final_values['init_year'],
+                                        final_values['end_year'],
+                                        final_values['central_dispatched'],
+                                        final_values['impo_renta'],
+                                        final_values['dias_cobrar'],
+                                        final_values['dias_pagar'],
+                                        final_values['flow_increase'],
+                                        final_values['increase_cost'],
+                                        final_values['year_increase'],
+                                        final_values['index_dictionary'],
+                                        final_values['working_directory'],
+                                        final_values['costo_patrimonio'],
+                                        final_values['differ_option_period'])
+                            object.read_input_files()
+                            object.calculate_WACC()
+                            object.update_dolar_to_peso()
+                            object.update_index_rate()
+                            object.apply_index()
+                            object.calculate_incomes()
+                            object.calculate_outcomes()
+                            object.calculate_pay_and_gasto()
+                            object.calculate_cash_flow()
+                            object.calculate_summary_per_serie()
+                            object.export_results()
+                            object.show_graphs()
+                            status= 200
+                            response = 'Análisis exitoso'
+                        except:
+                            status = 600
+                            response = 'Error realizando los calculos revise la consola'
+                            traceback.print_exc()
+                        
+                        
+                        if status < 500:
+                            output_message = response
+                            output_color = "#6aa84f"
+                        else:
+                            output_message = response
+                            output_color = "#A54C4C"
 
                     if event == "-wac-calculate":
                         print("executing wac")
-                        # status, response = calculate_wac(**final_values)
-                        # if status < 500:
-                        #     output_message = response
-                        #     output_color = "#6aa84f"
-                        # else:
-                        #     output_message = response
-                        #     output_color = "#A54C4C"
+                        try:
+                            object = pch_conomic_evaluation(final_values['init_year'],
+                                        final_values['end_year'],
+                                        final_values['central_dispatched'],
+                                        final_values['impo_renta'],
+                                        final_values['dias_cobrar'],
+                                        final_values['dias_pagar'],
+                                        final_values['flow_increase'],
+                                        final_values['increase_cost'],
+                                        final_values['year_increase'],
+                                        final_values['index_dictionary'],
+                                        final_values['working_directory'],
+                                        final_values['costo_patrimonio'],
+                                        final_values['differ_option_period'])
+                            object.read_input_files()
+                            object.calculate_WACC()
+                            status= 200
+                            response = 'Wacc calculada: ' + str(object.calculated_wacc)
+                        except:
+                            status = 600
+                            response = 'Error calculando wacc revise la consola'
+                            traceback.print_exc()
+
+                        if status < 500:
+                            output_message = response
+                            output_color = "#6aa84f"
+                        else:
+                            output_message = response
+                            output_color = "#A54C4C"
 
                 except:
+                    traceback.print_exc()
                     output_message = "Debe diligenciar todos los campos del formulario"
                     output_color = "#A54C4C"
                 finally:
