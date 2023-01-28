@@ -1,6 +1,8 @@
 import PySimpleGUI as sg
 from pch_evaluator import *
 import traceback
+
+from numpy import size
 class PronosticoView():
     def __init__(self) -> None:
         BACKGROUND_COLOR = "#f3f3f2"
@@ -80,16 +82,16 @@ class PronosticoView():
         indexadores_viewer = [
             [sg.Text(f'{i}', pad=((0, 0), (8, 8)), size=(13, 1), background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
              sg.T("", background_color=BACKGROUND_COLOR),
-             sg.Radio(f"", f"RADIO{i}", default=True, pad=((80, 0), (8, 8)),
+             sg.Radio(f"", f"RADIO{i}", default=True, pad=((60, 0), (8, 8)),
                       enable_events=True, key=f"-IPC&{i}", background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
              sg.T("        ", background_color=BACKGROUND_COLOR),
-             sg.Radio(f"", f"RADIO{i}", default=False, pad=((30, 0), (8, 8)),
+             sg.Radio(f"", f"RADIO{i}", default=False, pad=((25, 0), (8, 8)),
                       enable_events=True, key=f"-IPP&{i}", background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
              sg.T("           ", background_color=BACKGROUND_COLOR),
-             sg.Radio(f"", f"RADIO{i}", default=False, pad=((30, 0), (8, 8)),
+             sg.Radio(f"", f"RADIO{i}", default=False, pad=((25, 0), (8, 8)),
                       enable_events=True, key=f"-PPI&{i}", background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
              sg.T("        ", background_color=BACKGROUND_COLOR),
-             sg.Radio(f"", f"RADIO{i}", default=False, pad=((30, 0), (8, 8)),
+             sg.Radio(f"", f"RADIO{i}", default=False, pad=((25, 55), (8, 8)),
                       enable_events=True, key=f"-CPI&{i}", background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
              ] for i in DEFAULT_INDEX_SELECTION
         ]
@@ -103,14 +105,14 @@ class PronosticoView():
                 sg.Image(source="imgs/gen.png", pad=((0, 0), (30, 30)),  size=(
                     120, 120), background_color=BACKGROUND_COLOR),
             ],
-            [sg.Text("Evaluación Económica", pad=((150, 0), (5, 0)),
-                     background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR, font=("Nakula", 26))],
+            [sg.Text("Evaluación Económica", pad=((190, 0), (0, 0)),
+                     background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR, font=("Nakula", 22))],
             [sg.Text("Proyectos Hidroeléctricos", pad=((220, 0), (0, 15)),
                      background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR, font=("Nakula", 14))],
             [
                 sg.Text("Directorio de Trabajo",
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
-                sg.In(size=(60, 20), enable_events=True, key="-FOLDER-"),
+                sg.In(size=(54, 20), enable_events=True, key="-FOLDER-"),
                 sg.FolderBrowse(font=(
                     'Helvetica', 10)),
 
@@ -124,17 +126,17 @@ class PronosticoView():
             ],
             [sg.HSeparator()],
             [
-                sg.Text(" IPC", pad=((215, 0), (20, 5)),
+                sg.Text(" IPC", pad=((200, 0), (10, 5)),
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
-                sg.Text(" IPP", pad=((72, 0), (20, 5)),
+                sg.Text(" IPP", pad=((64, 0), (10, 5)),
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
-                sg.Text(" PPI", pad=((83, 0), (20, 5)),
+                sg.Text(" PPI", pad=((77, 0), (10, 5)),
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
-                sg.Text(" CPI", pad=((72, 0), (20, 5)),
+                sg.Text(" CPI", pad=((72, 0), (10, 5)),
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
             ],
             [
-                sg.Column(indexadores_viewer, pad=((30, 0), (0, 15)),
+                sg.Column(indexadores_viewer, pad=((30, 0), (0, 15)), scrollable= True,
                           vertical_scroll_only=True, background_color=BACKGROUND_COLOR),
             ],
         ]
@@ -221,19 +223,19 @@ class PronosticoView():
                 sg.InputText(size=(15, 1), pad=(
                     (10, 0), (10, 5)), key="-conf&Años_a_diferir           ", enable_events=True)
             ],
-            [sg.Column(summary_viewer,  pad=((0, 0), (10, 0)),
-                       background_color=BACKGROUND_COLOR), ],
+            # [sg.Column(summary_viewer,  pad=((0, 0), (10, 0)),
+            #            background_color=BACKGROUND_COLOR), ],
             [sg.Button('Calcular',  visible=True, font=(
                 'Helvetica', 11), key='-calculate', border_width=0, enable_events=True,
-                button_color="#454851", pad=((140, 0), (35, 20))
+                button_color="#454851", pad=((140, 0), (30, 140))
             ),
                 sg.Button('Calcular WACC',  visible=True, font=(
                     'Helvetica', 11), key='-wac-calculate', border_width=0, enable_events=True,
-                button_color="#454851", pad=((20, 0), (35, 20))
+                button_color="#454851", pad=((20, 0), (30, 140))
             ),
                 sg.Button('Reiniciar Valores',  visible=True, enable_events=True, font=(
                     'Helvetica', 11), key='-default-values', border_width=0,
-                button_color="#454851", pad=((20, 0), (35, 20))
+                button_color="#454851", pad=((20, 0), (30, 140))
             )],
             [sg.Image(source="imgs/loading.gif", key='-GIF-', pad=((180, 0), (0, 5)), size=(25, 25), background_color=BACKGROUND_COLOR, visible=False,),
                 sg.Text('Ejecutando procesos, por favor espera ...', size=(50, 1), pad=((10, 0), (0, 5)), key="-message", visible=False,
@@ -245,7 +247,7 @@ class PronosticoView():
                 sg.Column(file_list_column, background_color=BACKGROUND_COLOR),
                 sg.VSeperator(),
                 sg.Column(second_file_list_column,
-                          background_color=BACKGROUND_COLOR),
+                          background_color=BACKGROUND_COLOR, size=(600,580)),
             ]
         ]
 
@@ -259,8 +261,8 @@ class PronosticoView():
                 break
             if event == "-FOLDER-":
                 folder = values["-FOLDER-"]
-                window["folder_name"].update(
-                    f"  Directorio seleccionado: {folder}")
+                # window["folder_name"].update(
+                #     f"  Directorio seleccionado: {folder}")
                 continue
             if "-IPC&" in event or "-IPP&" in event or "-PPI&" in event or "-CPI&" in event:
                 value, key = event.split("&")
@@ -270,7 +272,7 @@ class PronosticoView():
                     data = []
                     data.append(sg.Text(""))
                     summary = f"{summary}\n\n  {selected}                {selection[selected][1:]}"
-                window["selected_index"].update(summary)
+                # window["selected_index"].update(summary)
                 continue
             if "-conf&" in event:
                 value, key = event.split("&")
@@ -284,11 +286,11 @@ class PronosticoView():
                 selection_conf[key] = input_value
                 for selected in selection_conf:
                     conf_summary = f"{conf_summary}\n\n  {selected.replace('_',' ')}        {selection_conf[selected]}"
-                window["selected_conf"].update(conf_summary)
+                # window["selected_conf"].update(conf_summary)
             if event == "-restore-":
                 for i in DEFAULT_INDEX_SELECTION:
                     window[f"-IPC&{i}"].update(True)
-                    window["selected_index"].update(DEFAULT_SELECTED_INDEX)
+                    # window["selected_index"].update(DEFAULT_SELECTED_INDEX)
 
             if "-calculate" in event:
                 window["-calculate"].update(disabled=True)
@@ -406,14 +408,15 @@ class PronosticoView():
                 selection_conf = DEFAULT_SELECTION_CONF.copy()
                 for selected in selection_conf:
                     window[f"-conf&{selected}"].update("")
-                window["selected_index"].update(DEFAULT_SELECTED_INDEX)
-                window["selected_conf"].update(DEFAULT_SELECTED_CONF)
+                # window["selected_index"].update(DEFAULT_SELECTED_INDEX)
+                # window["selected_conf"].update(DEFAULT_SELECTED_CONF)
                 folder = ""
-                window["folder_name"].update(
-                    f" Directorio seleccionado: {folder}")
+                # window["folder_name"].update(
+                #     f" Directorio seleccionado: {folder}")
                 window["-FOLDER-"].update(f"")
                 for i in DEFAULT_INDEX_SELECTION:
                     window[f"-IPC&{i}"].update(True)
+                window["-message"].update(visible=False)
         try:
             window.close()
         except SystemExit:
