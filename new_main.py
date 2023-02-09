@@ -3,6 +3,8 @@ from pch_evaluator import *
 import traceback
 
 from numpy import size
+
+
 class PronosticoView():
     def __init__(self) -> None:
         BACKGROUND_COLOR = "#f3f3f2"
@@ -13,14 +15,15 @@ class PronosticoView():
             "Año_Inicial             ": "init_year",
             "Año_Final               ": "end_year",
             "Despacho_central   ": "central_dispatched",
-            "Impuesto_de_renta   ": "impo_renta",
             "Días_por_cobrar       ": "dias_cobrar",
             "Días_por_pagar        ": "dias_pagar",
             "Aumento_ampliación": "flow_increase",
             "Costo_ampliación     ": "increase_cost",
             "Año_ampliación        ": "year_increase",
             "costo_patrimonio     ": "costo_patrimonio",
-            "Años_a_diferir           ": "differ_option_period"
+            "Años_a_diferir           ": "differ_option_period",
+            "Capacidad_ENFICC": "enficc_capacity",
+            "Año_disponibilidad_ENFICC": "enficc_available_year"
         }
         INDEX_VALUES = {
             "Costo Marginal   ": "marginal cost",
@@ -30,7 +33,8 @@ class PronosticoView():
             "FAZNI               ": "fazni",
             "Ley 99               ": "Ley 99",
             "AGC                 ": "Agc",
-            "Precios contratos   ": "contract prices"
+            "Precios contratos   ": "contract prices",
+            "Delta I": "Delta I"
         }
         DEFAULT_INDEX_SELECTION = {
             "Costo Marginal   ": "-IPC",
@@ -41,6 +45,7 @@ class PronosticoView():
             "Ley 99               ": "-IPC",
             "AGC                 ": "-IPC",
             "Precios contratos   ": "-IPC",
+            "Delta I": "-IPC",
 
         }
         DEFAULT_SELECTION_CONF = {
@@ -48,7 +53,6 @@ class PronosticoView():
             "Año_Final               ": "",
             "Despacho_central   ": False,
             "Año_Evaluación      ": "",
-            "Impuesto_de_renta   ": "",
             "costo_patrimonio     ": "",
             "Días_por_cobrar       ": "",
             "Días_por_pagar        ": "",
@@ -56,6 +60,8 @@ class PronosticoView():
             "Costo_ampliación     ": "",
             "Año_ampliación        ": "",
             "Años_a_diferir           ": "",
+            "Capacidad_ENFICC": "",
+            "Año_disponibilidad_ENFICC": ""
         }
         super().__init__()
         selection = DEFAULT_INDEX_SELECTION.copy()
@@ -136,7 +142,7 @@ class PronosticoView():
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
             ],
             [
-                sg.Column(indexadores_viewer, pad=((30, 0), (0, 15)), scrollable= True,
+                sg.Column(indexadores_viewer, pad=((30, 0), (0, 15)), scrollable=True,
                           vertical_scroll_only=True, background_color=BACKGROUND_COLOR),
             ],
         ]
@@ -170,10 +176,10 @@ class PronosticoView():
                     (10, 100), (10, 5)), key="-conf&Año_Evaluación      ", enable_events=True,),
             ],
             [
-                sg.Text('Impuesto de renta', size=(17, 1), pad=(
+                sg.Text('Capacidad ENFICC', size=(17, 1), pad=(
                     (10, 0), (10, 5)), background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
                 sg.InputText(size=(15, 1), pad=(
-                    (10, 0), (10, 5)), key="-conf&Impuesto_de_renta   ", enable_events=True),
+                    (10, 0), (10, 5)), key="-conf&Capacidad_ENFICC", enable_events=True),
                 sg.Text('Costo patrimonio', size=(15, 1), pad=((60, 0), (10, 5)),
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
                 sg.InputText(
@@ -190,6 +196,17 @@ class PronosticoView():
                 sg.InputText(
                     size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&Días_por_pagar        ", enable_events=True)
             ],
+            [
+                sg.Text('Año ini. ENFICC', size=(17, 1), pad=((10, 0), (10, 5)),
+                        background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR),
+                sg.InputText(
+                    size=(15, 1), pad=((10, 0), (10, 5)), key="-conf&Año_disponibilidad_ENFICC", enable_events=True)
+                
+            ],
+            # [
+            #     sg.InputText(
+            #         size=(15, 1), pad=((20, 0), (0, 5)), key="-conf&Año_disponibilidad_ENFICC", enable_events=True)
+            # ],
             [
                 sg.Text("Ampliar", pad=((0, 0), (0, 0)),
                         background_color=BACKGROUND_COLOR, text_color=PRIMARY_TEXT_COLOR, font=("Nakula", 11)),
@@ -247,7 +264,7 @@ class PronosticoView():
                 sg.Column(file_list_column, background_color=BACKGROUND_COLOR),
                 sg.VSeperator(),
                 sg.Column(second_file_list_column,
-                          background_color=BACKGROUND_COLOR, size=(600,580)),
+                          background_color=BACKGROUND_COLOR, size=(600, 580)),
             ]
         ]
 
@@ -311,27 +328,28 @@ class PronosticoView():
                         final_values[attributes] = float(
                             values[f"-conf&{form_attributes}"])
                     for form_attributes, attributes in INDEX_VALUES.items():
-                        final_index[attributes] = selection[form_attributes].split('-')[1]
-                    
+                        final_index[attributes] = selection[form_attributes].split(
+                            '-')[1]
+
                     final_values["index_dictionary"] = final_index
                     final_values["working_directory"] = folder
                     if event == "-calculate":
                         print("executing calculate")
-                        #execute calculate
+                        # execute calculate
                         try:
                             object = pch_conomic_evaluation(final_values['init_year'],
-                                        final_values['end_year'],
-                                        final_values['central_dispatched'],
-                                        final_values['impo_renta'],
-                                        final_values['dias_cobrar'],
-                                        final_values['dias_pagar'],
-                                        final_values['flow_increase'],
-                                        final_values['increase_cost'],
-                                        final_values['year_increase'],
-                                        final_values['index_dictionary'],
-                                        final_values['working_directory'],
-                                        final_values['costo_patrimonio'],
-                                        final_values['differ_option_period'])
+                                                            final_values['end_year'],
+                                                            final_values['central_dispatched'],
+                                                            final_values['impo_renta'],
+                                                            final_values['dias_cobrar'],
+                                                            final_values['dias_pagar'],
+                                                            final_values['flow_increase'],
+                                                            final_values['increase_cost'],
+                                                            final_values['year_increase'],
+                                                            final_values['index_dictionary'],
+                                                            final_values['working_directory'],
+                                                            final_values['costo_patrimonio'],
+                                                            final_values['differ_option_period'])
                             object.read_input_files()
                             object.calculate_WACC()
                             object.update_dolar_to_peso()
@@ -344,14 +362,13 @@ class PronosticoView():
                             object.calculate_summary_per_serie()
                             object.export_results()
                             object.show_graphs()
-                            status= 200
+                            status = 200
                             response = 'Análisis exitoso'
                         except:
                             status = 600
                             response = 'Error realizando los calculos revise la consola'
                             traceback.print_exc()
-                        
-                        
+
                         if status < 500:
                             output_message = response
                             output_color = "#6aa84f"
@@ -363,22 +380,23 @@ class PronosticoView():
                         print("executing wac")
                         try:
                             object = pch_conomic_evaluation(final_values['init_year'],
-                                        final_values['end_year'],
-                                        final_values['central_dispatched'],
-                                        final_values['impo_renta'],
-                                        final_values['dias_cobrar'],
-                                        final_values['dias_pagar'],
-                                        final_values['flow_increase'],
-                                        final_values['increase_cost'],
-                                        final_values['year_increase'],
-                                        final_values['index_dictionary'],
-                                        final_values['working_directory'],
-                                        final_values['costo_patrimonio'],
-                                        final_values['differ_option_period'])
+                                                            final_values['end_year'],
+                                                            final_values['central_dispatched'],
+                                                            final_values['impo_renta'],
+                                                            final_values['dias_cobrar'],
+                                                            final_values['dias_pagar'],
+                                                            final_values['flow_increase'],
+                                                            final_values['increase_cost'],
+                                                            final_values['year_increase'],
+                                                            final_values['index_dictionary'],
+                                                            final_values['working_directory'],
+                                                            final_values['costo_patrimonio'],
+                                                            final_values['differ_option_period'])
                             object.read_input_files()
                             object.calculate_WACC()
-                            status= 200
-                            response = 'Wacc calculada: ' + str(object.calculated_wacc)
+                            status = 200
+                            response = 'Wacc calculada: ' + \
+                                str(object.calculated_wacc)
                         except:
                             status = 600
                             response = 'Error calculando wacc revise la consola'
